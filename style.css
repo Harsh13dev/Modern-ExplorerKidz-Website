@@ -81,7 +81,7 @@ section {
 }
 
 .header .navbar-brand img {
-  height: 6rem;
+  height: 7rem;
   border-radius: 15px;
 }
 
@@ -417,7 +417,7 @@ section {
 
 .lightbox-img {
   width: 100%;
-  height: auto;
+  height: 100%;
   border-radius: 1rem;
   box-shadow: var(--box-shadow);
 }
@@ -614,6 +614,16 @@ section {
   margin-bottom: 3rem;
 }
 
+/* features Section */
+.title {
+  font-size: 3rem;
+  font-family: 'Fredoka One', cursive;
+  color: var(--dark); 
+  text-align: center; 
+  margin-bottom: 2rem;
+  margin-top: 6rem;
+}
+
 /* Newsletter Section */
 .newsletter {
   background: var(--accent);
@@ -770,6 +780,7 @@ section {
   }
   .lightbox-img {
     max-width: 95%;
+    height: auto;
   }
 }
 
@@ -788,7 +799,7 @@ section {
     height: 20rem;
   }
   .gallery-item img {
-    height: 15rem;
+    height: 25rem;
   }
   .filter-btn {
     font-size: 1.6rem;
