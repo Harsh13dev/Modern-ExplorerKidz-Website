@@ -1,0 +1,437 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features - Explorer Kidz</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Google Fonts (Poppins and Fredoka One) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&family=Fredoka+One&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header fixed-top">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a href="index.html" class="navbar-brand logo">
+          <img src="assets/explorer_kidz_log.png" alt="Explorer Kidz Logo" class="logo-img">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="programs.html">Programs</a></li>
+            <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+            <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      </nav>
+       <!-- Wave Divider -->
+       <!-- <div class="wave-divider">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113.64,28.06,1200,67.21V0H0Z" class="shape-fill"></path>
+        </svg>
+      </div> -->
+  </header>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <h2 class="section-title">OUR <span>Features</span></h2>
+    <!-- Why Children Love Us -->
+    <div class="container">
+      <h3 class="title" style="font-size: 3rem; font-family: 'Fredoka One', cursive; color: var(--dark); text-align: center; margin-bottom: 2rem;">Why Children Love Us</h3>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-swimming-pool feature-icon"></i>
+            </div>
+            <h4>Splash Pool</h4>
+            <p>Our splash pool offers safe water play, encouraging physical activity and pure joy under supervision.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-puzzle-piece feature-icon"></i>
+            </div>
+            <h4>Many Activities</h4>
+            <p>From art and music to outdoor games and storytelling, we offer a wide range of activities.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-gift feature-icon"></i>
+            </div>
+            <h4>Celebrations</h4>
+            <p>We celebrate festivals, birthdays, and milestones with color and joy, helping children in every step.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-smile feature-icon"></i>
+            </div>
+            <h4>Fun-Filled Learning Every Day</h4>
+            <p>Learning is an adventure with exciting daily activities that spark joy and curiosity.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-chalkboard-teacher feature-icon"></i>
+            </div>
+            <h4>Caring and Friendly Teachers</h4>
+            <p>Our teachers create a warm, supportive environment where children feel loved.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-paint-brush feature-icon"></i>
+            </div>
+            <h4>Creative Arts & Craft Time</h4>
+            <p>Children express themselves through fun and imaginative art projects.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-book-open feature-icon"></i>
+            </div>
+            <h4>Interactive Storytelling and Songs</h4>
+            <p>Engaging stories and music sessions that make learning magical.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-shield-alt feature-icon"></i>
+            </div>
+            <h4>Safe and Colorful Environment</h4>
+            <p>A vibrant space designed to keep children safe while they explore.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-gamepad feature-icon"></i>
+            </div>
+            <h4>Play-Based Learning Approach</h4>
+            <p>Learning through play helps children develop skills naturally.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-tree feature-icon"></i>
+            </div>
+            <h4>Exciting Outdoor Play Area</h4>
+            <p>Outdoor spaces for kids to run, play, and enjoy nature.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-flask feature-icon"></i>
+            </div>
+            <h4>Hands-On Science and Discovery</h4>
+            <p>Simple experiments that ignite a love for discovery.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-users feature-icon"></i>
+            </div>
+            <h4>Friendship and Social Skills</h4>
+            <p>Activities that teach sharing, teamwork, and friendship.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-trophy feature-icon"></i>
+            </div>
+            <h4>Celebration of Every Festival and Small Achievements</h4>
+            <p>We make every moment special, from festivals to small wins.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why Parents Choose Us -->
+    <div class="container mt-5">
+      <h3 class="title" style="font-size: 3rem; font-family: 'Fredoka One', cursive; color: var(--dark); text-align: center; margin-bottom: 2rem;">Why Parents Choose Us</h3>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-book feature-icon"></i>
+            </div>
+            <h4>Innovative Curriculum</h4>
+            <p>Our thoughtfully designed curriculum blends traditional learning with modern approaches to inspire critical thinking.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-users feature-icon"></i>
+            </div>
+            <h4>Dedicated Staff</h4>
+            <p>Our caring and qualified team is passionate about early childhood development, ensuring every child receives individual attention and support.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-child feature-icon"></i>
+            </div>
+            <h4>Holistic Development</h4>
+            <p>We focus on the all-round growth of your child — emotionally, socially, intellectually, and physically — laying a strong foundation for life.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-heart feature-icon"></i>
+            </div>
+            <h4>A Safe, Loving Environment</h4>
+            <p>Your child’s safety and happiness are our top priorities.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-chalkboard-teacher feature-icon"></i>
+            </div>
+            <h4>Experienced & Caring Educators</h4>
+            <p>Our teachers are trained, nurturing, and passionate about early childhood.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-hands-helping feature-icon"></i>
+            </div>
+            <h4>Holistic Development Approach</h4>
+            <p>We focus on emotional, social, physical, and cognitive growth.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-comments feature-icon"></i>
+            </div>
+            <h4>Strong Parent-School Communication</h4>
+            <p>Regular updates, feedback, and involvement keep you connected.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-school feature-icon"></i>
+            </div>
+            <h4>Clean, Hygienic & Child-Friendly Campus</h4>
+            <p>Designed with young children’s health and comfort in mind.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-book-open feature-icon"></i>
+            </div>
+            <h4>Age-Appropriate Learning Activities</h4>
+            <p>From phonics to fine motor skills — every activity has a purpose.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-user-friends feature-icon"></i>
+            </div>
+            <h4>Individual Attention for Every Child</h4>
+            <p>Small class sizes help us nurture each child’s unique personality.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-clock feature-icon"></i>
+            </div>
+            <h4>Convenient Timings & Flexible Options</h4>
+            <p>We support busy parents with practical scheduling.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-smile feature-icon"></i>
+            </div>
+            <h4>Happy Children, Happy Homes</h4>
+            <p>When children thrive, parents feel confident and content.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="feature-card">
+            <div class="icon-circle">
+              <i class="fas fa-star feature-icon"></i>
+            </div>
+            <h4>Trusted by Families in the Community</h4>
+            <p>A reputation built on years of love, care, and excellence.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ 
+  </section>
+
+  <!-- Footer Section -->
+  <section class="footer">
+    <div class="container">
+      <div class="row">
+        <!-- Column 1: School Name and Address -->
+        <div class="col-md-3">
+          <div class="box">
+            <h3><i class="fas fa-school"></i> EXPLORER KIDZ</h3>
+            <p>Dwaraka, S.No-59/2A/1, Prabhat Road Colony, Rahatni Link Road, Kalewadi, Pune-411017.</p>
+          </div>
+        </div>
+        <!-- Column 2: Quick Links -->
+        <div class="col-md-3">
+          <div class="box">
+            <h3>Quick Links</h3>
+            <a href="index.html#home" class="footer-link">Home</a>
+            <a href="index.html#about" class="footer-link">About</a>
+            <a href="programs.html" class="footer-link">Programs</a>
+            <a href="features.html" class="footer-link">Features</a>
+            <a href="gallery.html" class="footer-link">Gallery</a>
+            <a href="contact.html" class="footer-link">Contact</a>
+          </div>
+        </div>
+        <!-- Column 3: Contact Information -->
+        <div class="col-md-3">
+          <div class="box">
+            <h3>Contact Info</h3>
+            <p><i class="fas fa-phone"></i> +91 9284206438</p>
+            <p><i class="fas fa-phone"></i> +91 8970836385</p>
+            <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection#76534e575b465a5376534e465a594453445d5f524c1855595b"><span class="__cf_email__" data-cfemail="b0d5c8d1ddc0dcd5f0d5c8c0dcdfc2d5c2dbd9d4ca9ed3dfdd">[email&#160;protected]</span></a></p>
+          </div>
+        </div>
+        <!-- Column 4: Social Media -->
+        <div class="col-md-3">
+          <div class="box">
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+              <a href="https://facebook.com" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://instagram.com" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="https://twitter.com" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="credit"> Copyright 2025 | <span>Explorer Kidz Preschool</span> | All Rights Reserved</div>
+  </section>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/+919689871765?text=Hello,%20I’d%20like%20to%20know%20more%20about%20Explorer%20Kidz!" target="_blank" class="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Bootstrap JS -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93add65e1a8f1867',t:'MTc0NjQyMjkzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

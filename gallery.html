@@ -1,0 +1,226 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery - Explorer Kidz</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Fredoka+One&display=swap" rel="stylesheet">
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header fixed-top">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a href="index.html" class="navbar-brand logo">
+          <img src="assets/explorer_kidz_log.png" alt="Explorer Kidz Logo" class="logo-img">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html#home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="programs.html">Programs</a></li>
+            <li class="nav-item"><a class="nav-link" href="features.html">Features</a></li>
+            <li class="nav-item"><a class="nav-link active" href="gallery.html">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-slide" style="background-image: url('assets/our-gallery.jpg');">
+      <div class="container">
+        <div class="hero-content text-center" data-aos="fade-up">
+          <h1>Our <span>Gallery</span></h1>
+          <p>Capture the joy and creativity of Explorer Kidz through our vibrant photos of events, activities, and learning moments.</p>
+          <a href="#gallery" class="btn btn-primary">Explore Now</a>
+        </div>
+      </div>
+    </div>
+    <div class="wave-divider">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113.64,28.06,1200,67.21V0H0Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery" id="gallery">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Moments of <span>Joy</span></h2>
+      <div class="gallery-filters text-center mb-5" data-aos="fade-up" data-aos-delay="100">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="festivals">Festivals</button>
+        <button class="filter-btn" data-filter="field-trips">Field Trips</button>
+        <button class="filter-btn" data-filter="class-activities">Class Activities</button>
+      </div>
+      <div class="row gallery-grid">
+        <!-- Festivals -->
+        <div class="col-md-4 col-sm-6 gallery-item festivals" data-aos="fade-up" data-aos-delay="100">
+          <a href="assets/dandiya.jpg" class="gallery-link">
+            <img src="assets/dandiya.jpg" alt="dandiya" class="img-fluid rounded">   
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6 gallery-item festivals" data-aos="fade-up" data-aos-delay="200">
+          <a href="assets/diwali.jpg" class="gallery-link">
+            <img src="assets/diwali.jpg" alt="diwali" class="img-fluid rounded">           
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6 gallery-item festivals" data-aos="fade-up" data-aos-delay="200">
+          <a href="assets/janmastami.jpg" class="gallery-link">
+            <img src="assets/janmastami.jpg" alt="janmastami" class="img-fluid rounded">
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6 gallery-item festivals" data-aos="fade-up" data-aos-delay="200">
+          <a href="assets/ganpati.jpg" class="gallery-link">
+            <img src="assets/ganpati.jpg" alt="ganpati" class="img-fluid rounded">
+          </a>
+        </div>
+        <!-- Field Trips -->
+        <div class="col-md-4 col-sm-6 gallery-item field-trips" data-aos="fade-up" data-aos-delay="300">
+          <a href="assets/field trp 1.jpg" class="gallery-link">
+            <img src="assets/field trp 1.jpg" alt="Beach Trip" class="img-fluid rounded">       
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6 gallery-item field-trips" data-aos="fade-up" data-aos-delay="100">
+          <a href="assets/field trip 2.jpg" class="gallery-link">
+            <img src="assets/field trip 2.jpg" alt="Zoo Visit" class="img-fluid rounded">        
+          </a>
+        </div>
+        <!-- Class Activities -->
+        <div class="col-md-4 col-sm-6 gallery-item class-activities" data-aos="fade-up" data-aos-delay="200">
+          <a href="assets/green color.jpg" class="gallery-link">
+            <img src="assets/green color.jpg" alt="Craft Time" class="img-fluid rounded">     
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6 gallery-item class-activities" data-aos="fade-up" data-aos-delay="300">
+          <a href="assets/blue color.jpg" class="gallery-link">
+            <img src="assets/blue color.jpg" alt="Story Time" class="img-fluid rounded">    
+          </a>
+        </div>
+        <div class="col-md-4 col-sm-6 gallery-item class-activities" data-aos="fade-up" data-aos-delay="300">
+          <a href="assets/fancy.jpg" class="gallery-link">
+            <img src="assets/fancy.jpg" alt="Story Time" class="img-fluid rounded">    
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call-to-Action Section -->
+  <section class="cta">
+    <div class="container text-center">
+      <h2 data-aos="fade-up">Join the <span>Fun</span>!</h2>
+      <p data-aos="fade-up" data-aos-delay="100">Contact us to learn more about our programs and events or schedule a tour today!</p>
+      <a href="contact.html" class="btn btn-primary" data-aos="fade-up" data-aos-delay="200">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <h3><i class="fas fa-school"></i> Explorer Kidz</h3>
+          <p>Dwaraka, S.No-59/2A/1, Prabhat Road Colony, Rahatni Link Road, Kalewadi, Pune-411017.</p>
+        </div>
+        <div class="col-md-3">
+          <h3>Quick Links</h3>
+          <a href="index.html#home" class="footer-link">Home</a>
+          <a href="index.html#about" class="footer-link">About</a>
+          <a href="programs.html" class="footer-link">Programs</a>
+          <a href="features.html" class="footer-link">Features</a>
+          <a href="gallery.html" class="footer-link">Gallery</a>
+          <a href="contact.html" class="footer-link">Contact</a>
+        </div>
+        <div class="col-md-3">
+          <h3>Contact Info</h3>
+          <p><i class="fas fa-phone"></i> +91 9284206438</p>
+          <p><i class="fas fa-phone"></i> +91 8970836385</p>
+          <p><i class="fas fa-envelope"></i> <a href="mailto:info@explorerkidz.com">info@explorerkidz.com</a></p>
+        </div>
+        <div class="col-md-3 mb-3">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="https://facebook.com" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="credit">Copyright 2025 | <span>Explorer Kidz Preschool</span> | All Rights Reserved</div>
+  </footer>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/+919689871765?text=Hello,%20I’d%20like%20to%20know%20more%20about%20Explorer%20Kidz!" target="_blank" class="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <!-- AOS Animation Library -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+  </script>
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+</body>
+</html>
