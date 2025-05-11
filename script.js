@@ -93,50 +93,101 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Contact Form Submission
-  const contactForm = document.querySelector('#contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const nameInput = contactForm.querySelector('#name');
-      const emailInput = contactForm.querySelector('#email');
-      const phoneInput = contactForm.querySelector('#phone');
-      const messageInput = contactForm.querySelector('#message');
 
-      const name = nameInput.value.trim();
-      const email = emailInput.value.trim();
-      const phone = phoneInput.value.trim();
-      const message = messageInput.value.trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneRegex = /^\+?\d{10,15}$/;
+// Initialize EmailJS with your User ID
+emailjs.init({
+  publicKey: "RJ6PVm83Bs23PsnjW",
+});
 
-      if (!name) {
-        alert('Please enter your name.');
-        nameInput.focus();
-        return;
-      }
+// Contact Form Submission
+const contactForm = document.querySelector('#contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const nameInput = contactForm.querySelector('#name');
+    const emailInput = contactForm.querySelector('#email');
+    const phoneInput = contactForm.querySelector('#phone');
+    const messageInput = contactForm.querySelector('#message');
 
-      if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address.');
-        emailInput.focus();
-        return;
-      }
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const message = messageInput.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?\d{10,15}$/;
 
-      if (phone && !phoneRegex.test(phone)) {
-        alert('Please enter a valid phone number (10-15 digits).');
-        phoneInput.focus();
-        return;
-      }
+    if (!name) {
+      showCustomAlert('Error', 'Please enter your name.', 'error');
+      nameInput.focus();
+      return;
+    }
 
-      if (!message) {
-        alert('Please enter your message.');
-        messageInput.focus();
-        return;
-      }
+    if (!emailRegex.test(email)) {
+      showCustomAlert('Error', 'Please enter a valid email address.', 'error');
+      emailInput.focus();
+      return;
+    }
 
-      // Simulate form submission
-      alert('Thank you for your message! We will get back to you soon.');
+    if (phone && !phoneRegex.test(phone)) {
+      showCustomAlert('Error', 'Please enter a valid phone number (10-15 digits).', 'error');
+      phoneInput.focus();
+      return;
+    }
+
+    if (!message) {
+      showCustomAlert('Error', 'Please enter your message.', 'error');
+      messageInput.focus();
+      return;
+    }
+
+    // Send email using EmailJS
+    emailjs.send('service_0bwbkia', 'template_0riuwdj', {
+      name: name,
+      email: email,
+      phone: phone || 'Not provided',
+      message: message
+    })
+    .then(() => {
+      showCustomAlert('Success', 'Thank you for your message! We will get back to you soon.', 'success');
       contactForm.reset();
+    }, (error) => {
+      showCustomAlert('Error', 'Failed to send your message. Please try again later.', 'error');
+      console.error('EmailJS error:', error);
     });
-  }
+  });
+}
+
+// Function to show custom alert
+function showCustomAlert(title, message, type) {
+  const alertBox = document.getElementById('custom-alert');
+  const alertTitle = document.getElementById('custom-alert-title');
+  const alertMessage = document.getElementById('custom-alert-message');
+  const alertClose = document.getElementById('custom-alert-close');
+
+  // Set title and message
+  alertTitle.textContent = title;
+  alertMessage.textContent = message;
+
+  // Set type (success or error) for styling
+  alertTitle.classList.remove('success', 'error');
+  alertTitle.classList.add(type);
+
+  // Show the alert
+  alertBox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Close the alert on click
+  alertClose.addEventListener('click', () => {
+    alertBox.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  });
+
+  // Close the alert when clicking outside
+  alertBox.addEventListener('click', (e) => {
+    if (e.target === alertBox) {
+      alertBox.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+  });
+}
 });
