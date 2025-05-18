@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Initialize EmailJS with your User ID
 emailjs.init({
-  publicKey: "RJ6PVm83Bs23PsnjW",
+  publicKey: "i7ZooYxdu-y-6on8A", // i7ZooYxdu-y-6on8A
 });
 
 // Contact Form Submission
@@ -140,8 +140,18 @@ if (contactForm) {
       return;
     }
 
-    // Send email using EmailJS
-    emailjs.send('service_0bwbkia', 'template_0riuwdj', {
+    // Disable the submit button and show the spinner
+    const submitBtn = contactForm.querySelector('#submit-btn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnSpinner = submitBtn.querySelector('.btn-spinner');
+    submitBtn.disabled = true;
+    submitBtn.classList.add('disabled');
+    btnText.textContent = 'Sending...';
+    btnSpinner.style.display = 'inline-block';
+
+    // Send email using EmailJS 
+    // 'service_wrt1d0f', 'template_abtttnn'
+    emailjs.send('service_wrt1d0f', 'template_abtttnn', { 
       name: name,
       email: email,
       phone: phone || 'Not provided',
@@ -153,6 +163,13 @@ if (contactForm) {
     }, (error) => {
       showCustomAlert('Error', 'Failed to send your message. Please try again later.', 'error');
       console.error('EmailJS error:', error);
+    })
+    .finally(() => {
+      // Re-enable the button and hide the spinner
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('disabled');
+      btnText.textContent = 'Send Message';
+      btnSpinner.style.display = 'none';
     });
   });
 }

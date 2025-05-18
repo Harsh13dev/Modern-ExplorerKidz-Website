@@ -1,64 +1,29 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - Explorer Kidz</title>
   <!-- Favicon -->
-<link rel="apple-touch-icon" sizes="180x180" href="assets/Favicon/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/Favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="assets/Favicon/favicon-16x16.png">
-<link rel="manifest" href="assets/Favicon/site.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/Favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/Favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/Favicon/favicon-16x16.png">
+  <link rel="manifest" href="assets/Favicon/site.webmanifest">
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Fredoka+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Fredoka+One&display=swap"
+    rel="stylesheet">
   <!-- AOS Animation Library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <!-- Header Section -->
   <header class="header fixed-top">
@@ -67,7 +32,8 @@
         <a href="index.html" class="navbar-brand logo">
           <img src="assets/explorer_kidz_log.png" alt="Explorer Kidz Logo" class="logo-img">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon" style="width: 2.5rem; height: 3.5rem;"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -97,7 +63,9 @@
     </div>
     <div class="wave-divider">
       <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113.64,28.06,1200,67.21V0H0Z" class="shape-fill"></path>
+        <path
+          d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113.64,28.06,1200,67.21V0H0Z"
+          class="shape-fill"></path>
       </svg>
     </div>
   </section>
@@ -128,34 +96,47 @@
                 <label for="message" class="form-label">Message</label>
                 <textarea class="form-control" id="message" rows="5" placeholder="Your Message" required></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Send Message</button>
+              <button type="submit" class="btn btn-primary" id="submit-btn">
+                <span class="btn-text">Send Message</span>
+                <span class="btn-spinner" style="display: none;">
+                  <svg class="spinner" viewBox="0 0 24 24" width="24" height="24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" />
+                  </svg>
+                </span>
+              </button>
             </form>
           </div>
         </div>
         <!-- Custom Alert Box -->
-<div class="custom-alert" id="custom-alert">
-  <div class="custom-alert-content">
-    <span class="custom-alert-close" id="custom-alert-close">&times;</span>
-    <h3 id="custom-alert-title">Message</h3>
-    <p id="custom-alert-message">Your message here.</p>
-  </div>
-</div>
+        <div class="custom-alert" id="custom-alert">
+          <div class="custom-alert-content">
+            <span class="custom-alert-close" id="custom-alert-close">&times;</span>
+            <h3 id="custom-alert-title">Message</h3>
+            <p id="custom-alert-message">Your message here.</p>
+          </div>
+        </div>
         <!-- Contact Info and Map -->
         <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
           <div class="contact-info">
             <h3>Contact Information</h3>
-            <p><i class="fas fa-map-marker-alt"></i> Dwaraka, S.No-59/2A/1, Prabhat Road Colony, Rahatni Link Road, Kalewadi, Pune-411017</p>
+            <p><i class="fas fa-map-marker-alt"></i> Dwaraka, S.No-59/2A/1, Prabhat Road Colony, Rahatni Link Road,
+              Kalewadi, Pune-411017</p>
             <p><i class="fas fa-phone"></i> +91 9284206438</p>
             <p><i class="fas fa-phone"></i> +91 8970836385</p>
             <p><i class="fas fa-envelope"></i> <a href="mailto:explorer.kidz@gmail.com">explorer.kidz@gmail.com</a></p>
             <div class="social-icons mt-3">
-              <a href="https://facebook.com/ExplorerKidz/" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
-              <a href="https://instagram.com/explorer.kidz/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+              <a href="https://facebook.com/ExplorerKidz/" target="_blank" class="social-link"><i
+                  class="fab fa-facebook-f"></i></a>
+              <a href="https://instagram.com/explorer.kidz/" target="_blank" class="social-link"><i
+                  class="fab fa-instagram"></i></a>
               <!-- <a href="https://twitter.com" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a> -->
             </div>
           </div>
           <div class="contact-map mt-4">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.236227457629!2d73.78286067483445!3d18.60844168250227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b905b653234d%3A0xe9711687adf191e8!2sExplorer%20Kidz%20Pre%20School%20Day%20Care%2C%20Tuitions%20And%20Activity%20Centre%2C%20Rahatani%2C%20Pune%20%7C%20Best%20Preschool%20In%20Rahatani!5e0!3m2!1sen!2sin!4v1746258832883!5m2!1sen!2sin"  width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.236227457629!2d73.78286067483445!3d18.60844168250227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b905b653234d%3A0xe9711687adf191e8!2sExplorer%20Kidz%20Pre%20School%20Day%20Care%2C%20Tuitions%20And%20Activity%20Centre%2C%20Rahatani%2C%20Pune%20%7C%20Best%20Preschool%20In%20Rahatani!5e0!3m2!1sen!2sin!4v1746258832883!5m2!1sen!2sin"
+              width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
       </div>
@@ -166,7 +147,8 @@
   <section class="cta">
     <div class="container text-center">
       <h2 data-aos="fade-up">Ready to <span>Join Us</span>?</h2>
-      <p data-aos="fade-up" data-aos-delay="100">Schedule a tour or enroll your child in our joyful preschool programs today!</p>
+      <p data-aos="fade-up" data-aos-delay="100">Schedule a tour or enroll your child in our joyful preschool programs
+        today!</p>
       <a href="programs.html" class="btn btn-primary" data-aos="fade-up" data-aos-delay="200">Explore Programs</a>
     </div>
   </section>
@@ -197,8 +179,10 @@
         <div class="col-md-3 mb-3">
           <h3>Follow Us</h3>
           <div class="social-icons">
-            <a href="https://facebook.com/ExplorerKidz/" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://instagram.com/explorer.kidz/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="https://facebook.com/ExplorerKidz/" target="_blank" class="social-link"><i
+                class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/explorer.kidz/" target="_blank" class="social-link"><i
+                class="fab fa-instagram"></i></a>
             <!-- <a href="https://twitter.com" target="_blank" class="social-link"><i class="fab fa-twitter"></i></a> -->
           </div>
         </div>
@@ -208,12 +192,15 @@
   </footer>
 
   <!-- WhatsApp Floating Button -->
-  <a href="https://wa.me/+919689871765?text=Hello,%20I’d%20like%20to%20know%20more%20about%20Explorer%20Kidz!" target="_blank" class="whatsapp-float">
+  <a href="https://wa.me/+919284206438?text=Hello,%20I’d%20like%20to%20know%20more%20about%20Explorer%20Kidz!"
+    target="_blank" class="whatsapp-float">
     <i class="fab fa-whatsapp"></i>
   </a>
 
   <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
   <!-- AOS Animation Library -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
@@ -227,4 +214,5 @@
   <!-- Custom JS -->
   <script src="script.js"></script>
 </body>
+
 </html>
